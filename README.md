@@ -4,3 +4,6 @@ Problem Statement: "Computer Science students applying for internships and gradu
 We are looking to Create a CV analyser tool which utilises the concept of Retrieval Augmented Generation (RAG) to assist in not only helping the students with improving their CV but providing them actionable insights to improve their overall employability, all in all improving students' confidence with the overarching tech application processes.
 
 This will be a fastApi x react project
+
+backend\app\models will hold the data models for CV parsing
+backend\app\routers will hold the API route handlers
