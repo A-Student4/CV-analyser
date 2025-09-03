@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from models import AnalyseRequest, AnalyseResponse
+from models import AnalyseRequest, AnalyseResponse, ImprovementSuggestion
 
 app = FastAPI()
 
@@ -13,18 +13,31 @@ def handle_analysis(request: AnalyseRequest) -> AnalyseResponse:
     # and we would process them to generate an analysis response.
     
     if request.job_link and request.cv_text:
-        """
-        Here, we would implement the actual logic to:
-        1: Scrape the job link to get the job description
-        2: Perform deep Retrieval-Augmented Generation (RAG) analysis using the CV and job information
-        3: Return the full AnalyseResponse JSON object which includes match_score, analysis_summary, and suggested_improvements
-        """
-        pass
+        # Mock response simulating analysis
+        mock_response = AnalyseResponse(
+            match_score=85.0,
+            analysis_summary="The CV matches well with the job description, highlighting relevant skills and experiences.",
+            suggested_improvements=[
+                ImprovementSuggestion(
+                    original_text="Managed a team of 5",
+                    suggested_text="Led a team of 5 to successfully complete projects on time",
+                    improvement_reason="Provides more context and impact of the leadership role."
+                ),
+                ImprovementSuggestion(
+                    original_text="Worked on Python projects",
+                    suggested_text="Developed and maintained Python applications, improving performance by 20%",
+                    improvement_reason="Quantifies the contribution and adds a measurable outcome."
+                )
+            ]
+        )
+        
+        return mock_response
+    
     else:
         # If either the job link or CV text is missing, we return a default response
         return AnalyseResponse(
             match_score=0.0,
-            analysis_summary="Please a valid job link and CV text to get an analysis.",
+            analysis_summary="Please provide a valid job link and CV text to get an analysis.",
             suggested_improvements=[]
         )
 
