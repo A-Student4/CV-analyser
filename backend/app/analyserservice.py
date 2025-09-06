@@ -1,8 +1,12 @@
 from .models import AnalyseResponse, ImprovementSuggestion
+import google.generativeai as genai
+import os
+import chromadb
 import requests
 import pdfplumber
 from fastapi import UploadFile
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
 
 """
@@ -49,8 +53,9 @@ def extract_text_from_cv(cv_file: UploadFile) -> str:
         return full_text.strip()  # Return the full text, stripping any extra whitespace
     except Exception as e:
         return f"An error occurred while extracting text from the CV: {e}"
-
+    
 def get_ai_analysis(cv_text: str, job_description: str) -> AnalyseResponse:
+#def get_ai_analysis():
     """
     Performs the Core RAG analysis using the CV text and job description.
     Returns a Structured AnalyseResponse object.
@@ -62,36 +67,40 @@ def get_ai_analysis(cv_text: str, job_description: str) -> AnalyseResponse:
     #5. Call the LLM API (e.g., OpenAI GPT-4).
     #6. Parse the LLM response and format it into the AnalyseResponse structure.
 
-    # For the purpose of this example, we will return a mock response
-    mock_response = AnalyseResponse(
-        match_score=90.0,
-        analysis_summary="The CV is highly relevant to the job description, showcasing key skills and experiences that align well with the role.",
-        suggested_improvements=[
-            ImprovementSuggestion(
-                original_text="Assisted in project management",
-                suggested_text="Led project management efforts, resulting in a 15% increase in on-time delivery",
-                improvement_reason="Highlights leadership and quantifies impact."
-            ),
-            ImprovementSuggestion(
-                original_text="Experience with Java",
-                suggested_text="Developed scalable applications using Java, improving system efficiency by 25%",
-                improvement_reason="Provides specific achievements and measurable outcomes."
-            )
-        ]
+    # Load the Gemini API key from environment variables
+    load_dotenv()  # Load environment variables from a .env file if one is present anywhere in the project directory
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    if not gemini_api_key:
+        raise ValueError("GEMINI_API_KEY not found in environment variables.")
+    genai.configure(api_key=gemini_api_key)
+
+    # Now steps 1 and 2: Create embeddings and store in a vector database: ChromaDB
+    client = chromadb.Client()  # Initialize ChromaDB client
+    collection = client.get_or_create_collection(name="cv_collection")  # Get or create a collection for CV embeddings, named "cv_collection"
+
+    cv_chunks = []
+    for chunk in cv_text.split("\n"):
+        if chunk.strip():
+            cv_chunks.append(chunk.strip())
+    
+    embeddings = genai.embed_content(model="models/text-embedding-005",
+                                      content=cv_chunks,
+                                      task_type="RETRIEVAL_DOCUMENT") # Create embeddings for each chunk of CV text using the specified embedding model, task type is set to "RETRIEVAL_DOCUMENT" 
+    collection.add(
+        documents=cv_chunks,
+        embeddings=embeddings,
+        ids=[f"cv_chunk_{i}" for i in range(len(cv_chunks))]  # Unique IDs for each chunk
     )
-
-    return mock_response
-    
-
-    
-
    
 
 
 if __name__ == "__main__":
+    """
     # Test the scraper with a sample job posting URL
     test_url = "https://job-boards.greenhouse.io/mwinternshipprogram/jobs/7998360002?utm_source=Trackr&utm_medium=tracker&utm_campaign=UK_Technology_2026&gh_src=Trackr"
     print(scrape_job_description(test_url))
+    """
+
 
 
 
