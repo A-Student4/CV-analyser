@@ -1,5 +1,6 @@
-from fastapi import FastAPI
-from models import AnalyseRequest, AnalyseResponse, ImprovementSuggestion
+from fastapi import FastAPI, UploadFile, File
+from app import analyserservice
+from .models import AnalyseRequest, AnalyseResponse, ImprovementSuggestion
 
 app = FastAPI()
 
@@ -7,7 +8,9 @@ app = FastAPI()
 def read_root():
     return {"Hello": "Prospero"} # this will return a JSON response with a key "Hello" and value "World" on accessing the root URL
 
-@app.post("/analyse", response_model=AnalyseResponse) 
+
+@app.post("/analyse", response_model=AnalyseResponse)
+
 def handle_analysis(request: AnalyseRequest) -> AnalyseResponse:
     # For the MVP, we imagine that a CV and job link was provided in the request
     # and we would process them to generate an analysis response.
@@ -40,7 +43,4 @@ def handle_analysis(request: AnalyseRequest) -> AnalyseResponse:
             analysis_summary="Please provide a valid job link and CV text to get an analysis.",
             suggested_improvements=[]
         )
-
-
-        
 

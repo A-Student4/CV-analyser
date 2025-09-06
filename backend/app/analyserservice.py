@@ -19,7 +19,6 @@ def scrape_job_description(url: str) -> str:
     Returns the clean text as a string.
     """
 
-
     try:
         response = requests.get(url) # Send a GET request to the URL, which returns a Response object representing the HTML content of the job posting page
         response.raise_for_status()  # Raise an error for bad responses
@@ -40,9 +39,11 @@ def extract_text_from_cv(cv_file: UploadFile) -> str:
     and returns the extracted text as a string.
     """
 
+    print(f"--- DEBUG: Processing file '{cv_file.filename}', content type '{cv_file.content_type}' ---")
+
     try:
         with pdfplumber.open(cv_file.file) as pdf:
-            full_text = ""
+            full_text = cv_file.filename + "\n\n"  # Start with the filename for context
             for page in pdf.pages:
                 full_text += page.extract_text() + "\n"  # Extract text from each page and add a newline for separation
         return full_text.strip()  # Return the full text, stripping any extra whitespace
@@ -91,3 +92,6 @@ if __name__ == "__main__":
     # Test the scraper with a sample job posting URL
     test_url = "https://job-boards.greenhouse.io/mwinternshipprogram/jobs/7998360002?utm_source=Trackr&utm_medium=tracker&utm_campaign=UK_Technology_2026&gh_src=Trackr"
     print(scrape_job_description(test_url))
+
+
+
