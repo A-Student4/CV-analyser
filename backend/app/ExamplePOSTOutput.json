@@ -1,31 +1,22 @@
 {
-  "match_score": 65,
-  "analysis_summary": "Your CV shows great potential for this Marshall Wace Technology Internship. You're proactively building your tech skills and seeking opportunities at top firms, which aligns well with the programme's emphasis on initiative and learning. The mention of developing a 'fully functional product' demonstrates practical programming experience, and your engagement with mentorship and networks highlights your collaborative spirit and commitment to growth. To significantly strengthen your application, focus on providing more specific details about your technical skills, academic achievements, and the impact of your projects. Emphasizing your enthusiasm for financial technology and explicit communication of soft skills will also make you a more compelling candidate.",
+  "match_score": 60,
+  "analysis_summary": "This is a strong foundational profile for a first-year student applying to a competitive firm like Marshall Wace. You've correctly identified and included the exact types of experience they value: a relevant internship, hackathon participation, and a Computer Science degree. The main area for improvement is to transform your descriptions from passive statements into active demonstrations of your skills, using specific technologies and quantifiable achievements to prove your impact.",
   "suggested_improvements": [
     {
-      "original_text": "accessing opportunities at top tech firms.",
-      "suggested_text": "Proactively pursuing and engaging with career development initiatives to secure opportunities at leading tech firms, demonstrating an entrepreneurial approach to career growth.",
-      "improvement_reason": "This rephrasing shifts from a passive statement to an active one, showcasing initiative and entrepreneurial spirit, which is highly valued in the job description ('entrepreneurialism'). It also implies action rather than just observation."
-    },
-    {
-      "original_text": "Participating in skills workshops, mock interviews, assessment centers, and career-focused courses to build tech-",
-      "suggested_text": "Actively participating in targeted skills workshops, mock interviews, and career-focused courses to develop robust technical programming skills (e.g., Python, Java, web development fundamentals) and enhance problem-solving capabilities.",
-      "improvement_reason": "The original text was incomplete ('tech-'). This suggestion completes the sentence, specifies the *types* of tech skills being built (addressing a key gap in the CV), and links it to problem-solving, a core requirement of the role. It also demonstrates alignment with the 'actively developed technical, programming skills' requirement."
-    },
-    {
       "original_text": "other aspects including the Frontend and Backend, achieving a fully functional product by the event's end.",
-      "suggested_text": "Collaborated effectively within a team (or independently) to develop a fully functional product, contributing to both Frontend (e.g., React, HTML/CSS) and Backend (e.g., Python/Flask, Node.js) aspects. Demonstrated rapid prototyping and problem-solving under pressure, achieving project completion by the event's deadline. [Optional: Specify project name/type and impact, e.g., 'Developed a real-time data visualization tool for X purpose.']",
-      "improvement_reason": "The original is too vague. This suggestion pushes for specifics: mentioning technologies used (Frontend/Backend examples), highlighting collaboration (a key JD requirement), and demonstrating problem-solving and delivery under pressure. Quantifying or naming the project would further enhance it by providing concrete examples of 'inventive and creative use of technology'."
+      "suggested_text": "Engineered a full-stack solution, developing a responsive frontend with [e.g., React, TypeScript] and a robust backend API using [e.g., Python with Django/Flask, or Node.js]. Deployed a fully functional product that [mention a specific outcome, e.g., 'served 50+ users during the event'].",
+      "improvement_reason": "The original text is too vague. This suggestion specifies the technologies used, demonstrating the 'actively developed technical, programming skills' the job description requires. Quantifying the outcome (e.g., '50+ users') provides concrete evidence of your impact."
     },
     {
-      "original_text": "Engaging with the Social Mobility Network (SMN) and receiving mentorship from partners like Google and Microsoft.",
-      "suggested_text": "Actively engaging with the Social Mobility Network (SMN) and leveraging mentorship from industry leaders at Google and Microsoft to enhance professional development, leadership skills, and gain insights into cutting-edge technologies and career pathways.",
-      "improvement_reason": "This improves upon 'receiving mentorship' by showing active engagement and what was gained from the mentorship, such as professional development, leadership skills, and industry insights. This aligns with the JD's emphasis on learning, development, and strong communication/collaboration skills."
+      "original_text": "Participated in the 2024 Black Googlers Network Hackathon, a 4-day event hosted by Google.",
+      "suggested_text": "Collaborated in a team of 4 to design, build, and deploy a [describe the project, e.g., 'financial sentiment analysis tool using Python and the Google Cloud Natural Language API'] during the intensive 4-day Black Googlers Network Hackathon.",
+      "improvement_reason": "'Participated' is a passive word. This revision uses active verbs ('Collaborated', 'design', 'build') and details the project and technology stack. This directly showcases the 'inventive and creative use of technology' and 'team-working' skills the employer is seeking."
     },
     {
-      "original_text": "University of Birmingham, BSc Computer Science 2024 — 2027",
-      "suggested_text": "University of Birmingham, BSc Computer Science (Expected First Class Honours / 2:1) 2024 — 2027",
-      "improvement_reason": "The job description mentions 'exceptional academic achievement'. Adding your predicted or current grades immediately addresses this and strengthens your academic profile. If no predicted grade is available, mention any academic awards, scholarships, or relevant modules/projects with high marks."
+      "original_text": "Delivered final team pitch to judges, showcasing innovation and collaboration skills.",
+      "suggested_text": "Co-presented the final project pitch to a panel of Google engineers, articulating our solution's technical architecture and its potential to [mention the project's goal, e.g., 'improve accessibility in online banking'].",
+      "improvement_reason": "This provides specific, compelling evidence of the 'impressive communication and collaboration skills' mentioned in the job description. It details who you presented to (Google engineers) and what you discussed (technical architecture, business impact), which is far more powerful than simply claiming the skill."
     }
-  ]
+  ],
+  "closing_remarks": "You have the right building blocks to be a very strong candidate. By implementing these changes, you will provide the specific, evidence-based details that top-tier financial technology firms like Marshall Wace need to see. Your experience aligns perfectly with what they're looking for; these edits will ensure your CV communicates your abilities effectively. I encourage you to make these updates and submit your application with confidence."
 }

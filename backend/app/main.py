@@ -1,6 +1,7 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
+from typing import Optional
 from app import analyserservice
-from .models import AnalyseRequest, AnalyseResponse, ImprovementSuggestion
+from .models import AnalyseResponse, ImprovementSuggestion
 
 app = FastAPI()
 
@@ -10,24 +11,27 @@ def home():
 
 @app.post("/analyse", response_model=AnalyseResponse)
 
-def handle_analysis(request: AnalyseRequest) -> AnalyseResponse:
+def handle_analysis(
+    cv_file: UploadFile = File(..., description="The CV file in PDF format."),
+    job_link: str = Form(..., description="The URL link to the job posting."),
+    initial_prompt: Optional[str] = Form(None, description="An optional initial prompt to guide the analysis.")
+) -> AnalyseResponse:
     # For the MVP, we imagine that a CV and job link was provided in the request
     # and we would process them to generate an analysis response.
 
-    if request.job_link and request.cv_text:
-        # Call the analyserservice to perform the analysis
-        #cv_text = analyserservice.extract_text_from_cv(request.cv_file)
-        job_description = analyserservice.scrape_job_description(request.job_link)
+    # Step 1: Extract text from the uploaded CV file
+    cv_text = analyserservice.extract_text_from_cv(cv_file)
 
-        analysis_response = analyserservice.get_ai_analysis(request.cv_text, job_description)
-        return analysis_response
-    
-    else:
-        # If either the job link or CV text is missing, we return a default response
-        return AnalyseResponse(
-            match_score=0.0,
-            analysis_summary="Please provide a valid job link and CV text to get an analysis.",
-            suggested_improvements=[]
-        )
+    # Step 2: Scrape the job description from the provided job link
+    job_description = analyserservice.scrape_job_description(job_link)
 
+    # Step 3: Perform the AI analysis using the extracted CV text and job description
+    analysis_response = analyserservice.get_ai_analysis(
+        cv_text,
+        job_description,
+        #initial_prompt
+    )
+
+
+    return analysis_response    # Return the analysis response which will be automatically converted to JSON by FastAPI
         

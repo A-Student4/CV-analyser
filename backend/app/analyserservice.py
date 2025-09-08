@@ -83,9 +83,9 @@ def get_ai_analysis(cv_text: str, job_description: str) -> AnalyseResponse:
     
     # We will split the CV text into smaller chunks for better embedding performance and retrieval later on.
     cv_chunks = []
-    for chunk in cv_text.split("\n"):
-        if chunk.strip():
-            cv_chunks.append(chunk.strip())
+    for value in cv_text.split("\n"):
+        if value.strip():
+            cv_chunks.append(value.strip())
     
     # Create embeddings for each chunk of CV text, these embeddings will be used for similarity search later on, 
     # the purpose of the embeddings is to convert the text into a numerical format that captures its semantic meaning, allowing us to perform efficient similarity searches.
@@ -130,7 +130,7 @@ def get_ai_analysis(cv_text: str, job_description: str) -> AnalyseResponse:
                 "suggested_text": str,  # The suggested improved text
                 "improvement_reason": str  # A brief explanation of why the suggestion improves the CV for this role
             }},
-            ...
+        "closing_remarks": str  # A positive closing remark to encourage the candidate link back to the job posting and next steps  
         ]
     }}
 
@@ -138,7 +138,7 @@ def get_ai_analysis(cv_text: str, job_description: str) -> AnalyseResponse:
     """
 
     # Step 5: Call the LLM API (e.g., Gemini or OpenAI GPT-4)
-    model = genai.GenerativeModel("gemini-2.5-flash")  # Initialize the Gemini model
+    model = genai.GenerativeModel("gemini-2.5-pro")  # Initialize the Gemini model
     response = model.generate_content(prompt)  # Generate text based on the constructed prompt
 
     import json
@@ -159,7 +159,8 @@ def get_ai_analysis(cv_text: str, job_description: str) -> AnalyseResponse:
         return AnalyseResponse(
             match_score=0.0,
             analysis_summary="There was an issue analyzing the response from the AI. Please try again.",
-            suggested_improvements=[]
+            suggested_improvements=[],
+            closing_remarks="If the issue persists, please contact support."
         )
 
 
