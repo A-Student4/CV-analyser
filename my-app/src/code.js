@@ -13,7 +13,7 @@ const CVAnalyser = () => {
 
   useEffect(() => {
     // Fetch data from the backend when the component mounts
-    fetch('my-app/src/ExamplePOSTOutput.json')
+    fetch('/ExamplePOSTOutput.json')
       .then((response) => response.json()) // Parse the JSON response and return it
       .then((data) => setData(data)) // Set the fetched data to state
       .catch((error) => console.error("Error fetching data:", error));
@@ -39,8 +39,6 @@ const CVAnalyser = () => {
 
       <main className="chat-interface">
         {/* Chat messages will appear here */}
-<pre>{data ? JSON.stringify(data, null, 2) : "Loading..."}</pre>
-
       </main>
 
       <footer className="input-area">
