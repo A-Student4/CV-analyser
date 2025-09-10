@@ -1,7 +1,111 @@
 .App {
   text-align: center;
 }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #131314; /* Dark background */
+  color: #e3e3e3; /* Light text color */
+}
 
+.app-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes input to the bottom */
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.chat-header h1 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #8e98a3;
+  background-color: #131314;
+}
+
+
+/* The main form container that looks like a rounded box */
+.chat-input-form {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between items */
+  background-color: #1e1f20; /* Slightly lighter dark for the input bar */
+  padding: 8px;
+  border-radius: 28px; /* Fully rounded corners */
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* NEW: Style for the "Upload CV" button */
+.action-button {
+  background-color: #333435;
+  color: #e3e3e3;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+.action-button:hover {
+  background-color: #454647;
+}
+
+/* NEW: Style for the "Job Link" input */
+.job-link-input {
+  background-color: #333435;
+  border: 1px solid #454647;
+  border-radius: 10px;
+  color: #e3e3e3;
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 150px; /* Give it a defined width */
+}
+.job-link-input:focus {
+  outline: none;
+  border-color: #6c99e0; /* Highlight with blue when active */
+}
+
+/* The main text input area */
+.input-field {
+  flex-grow: 1; /* Takes up all available space */
+  background-color: transparent;
+  border: none;
+  color: #e3e3e3;
+  font-size: 16px;
+  resize: none;
+  height: 24px;
+  line-height: 24px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.input-field:focus {
+  outline: none;
+}
+
+/* The final send button */
+.send-button {
+  background-color: #2a2b2c;
+  border: none;
+  color: #8e98a3;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.send-button:hover {
+  background-color: #333435;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -21,7 +125,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(49, 48, 47);
 }
 
 .App-link {
@@ -35,4 +139,60 @@
   to {
     transform: rotate(360deg);
   }
+}
+/* Main container for the whole widget */
+
+.chat-widget {
+  border: 5px solid #ddd; /* A light grey border like the image */
+  border-radius: 8px; /* Rounded corners for the container */
+  font-family: sans-serif;
+  width: 60%; /* Make it take up the full width of its parent */
+  max-width: 700px; /* Optional: prevent it from being too wide */
+  margin: 50px auto; /* "auto" on the left and right will center it */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* A soft shadow */
+  overflow: hidden; /* Keeps the child elements inside the rounded corners */
+}
+
+
+
+.chat-header .dots {
+  color: #999;
+}
+
+/* This is your new #prompt-box for displaying messages */
+.chat-messages {
+  padding: 20px;
+  min-height: 250px; /* Gives the chat area some space */
+  background-color: #fff; /* White background for messages */
+  line-height: 1.6;
+  color: #333;
+}
+
+/* The area at the bottom holding the input and button */
+.chat-input-area {
+  display: flex; /* Aligns the input field and button side-by-side */
+  border-top: 1px solid #ddd;
+}
+
+/* The text input field */
+.chat-input-area input {
+  flex-grow: 1; /* Makes the input field take up all available space */
+  border: none; /* Removes the default border */
+  padding: 16px;
+  font-size: 14px;
+}
+
+
+/* The "Send" button 
+.chat-input-area button {
+  background-color: #0707072c;
+  color: white;  White text 
+  border: none;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;  Makes the mouse turn into a pointer on hover */
+
+.chat-input-area button:hover {
+  background-color: #0056b3; /* A darker blue on hover */
 }

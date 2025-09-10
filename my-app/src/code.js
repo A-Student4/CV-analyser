@@ -1,83 +1,86 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import './App.css';
 
-const CVAnalynser = () => {
-  const [search, setSearch] = useState("");
+import { IoPaperPlaneOutline } from "react-icons/io5";
+
+
+const CVAnalyser = () => {
+
+  const [prompt, setPrompt] = useState("");
+  // Add a new state for the job link input
+  const [jobLink, setJobLink] = useState("");
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    // Fetch data from the backend when the component mounts
+    fetch('my-app/src/ExamplePOSTOutput.json')
+      .then((response) => response.json()) // Parse the JSON response and return it
+      .then((data) => setData(data)) // Set the fetched data to state
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Do something with the search value
-    alert(`You searched for: ${search}`);
+    if (!prompt.trim() && !jobLink.trim()) return; // Don't submit if both are empty
+    alert(`Job Link: ${jobLink}\nMessage: ${prompt}`);
+    setPrompt(""); // Clear the input after sending
   };
 
+
+
   return (
-    <>
-      <h1
-        style={{
-          fontSize: "3rem",
-          textAlign: "center",
-          marginTop: "30px",
-          marginBottom: "20px"
-        }}
-      >
-        CV Analyser
-      </h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Search or type here..."
-          style={{ marginBottom: "10px", padding: "8px", width: "60%" }}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button type="submit" style={{ marginLeft: "10px" }}>
-          Enter
-        </button>
-      </form>
-      <br />
-      <input
-        type="text"
-        placeholder="Job Link"
-        style={{ marginBottom: "10px", padding: "8px", width: "60%" }}
-      />
-      <br />
-      <button>Upload CV</button>
-      <div id="prompt-box"></div>
-      #prompt-box {
-  background-color: #f4f7f9; /* A light grey background */
-  border-left: 4px solid #007bff; /* A solid blue left border for emphasis */
-  padding: 20px; /* Space inside the box */
-  margin: 20px 0; /* Space outside the box */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* A subtle shadow */
-  font-family: sans-serif; /* A clean font */
-  line-height: 1.6; /* Spacing between lines of text */
-}
-// Get a reference to the HTML box using its ID
-const promptBox = document.getElementById('prompt-box');
+    <div className="app-container">
+      <header className="chat-header">
+        <h1>CV Analyser</h1>
+      </header>
+      <div className="chat-widget">
+        <p>{data ? data.match_score : "Loading..."}</p>
+      </div>
 
-// Set a loading message while we fetch the data
-promptBox.textContent = 'Loading prompt...';
+      <main className="chat-interface">
+        {/* Chat messages will appear here */}
+<pre>{data ? JSON.stringify(data, null, 2) : "Loading..."}</pre>
 
-// Fetch the JSON file
-fetch('mockData.json')
-  .then(response => response.json()) // Convert the response to a JSON object
-  .then(data => {
-    // Access the specific prompt you want to display.
-    // This example takes the first suggestion from the array.
-    const promptText = data.suggestedImprovements[0].suggestion;
+      </main>
 
-    // Put the text inside the box
-    promptBox.textContent = promptText;
-  })
-  .catch(error => {
-    // If something goes wrong, show an error message
-    console.error('Failed to fetch prompt:', error);
-    promptBox.textContent = 'Error: Could not load the prompt.';
-  });
+      <footer className="input-area">
+        <form className="chat-input-form" onSubmit={handleSubmit}>
+          {/* The "Add" and "Tools" buttons are replaced with these: */}
+          
+          {/* 1. New "Upload CV" button */}
+          <button type="button" className="action-button">
+            Upload CV
+          </button>
 
-    </>
+          {/* 2. New "Job Link" input box */}
+          <input
+            type="text"
+            placeholder="Paste Job Link..."
+            className="job-link-input"
+            value={jobLink}
+            onChange={(e) => setJobLink(e.target.value)}
+          />
+          
+          <textarea
+            placeholder="Message..."
+            className="input-field"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e);
+              }
+            }}
+          />
 
+          <button type="submit" className="send-button">
+            <IoPaperPlaneOutline size={24} />
+          </button>
+        </form>
+      </footer>
+    </div>
   );
-};
+}
 
 export default CVAnalyser;
