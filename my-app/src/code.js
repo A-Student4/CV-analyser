@@ -10,6 +10,7 @@ const CVAnalyser = () => {
   // Add a new state for the job link input
   const [jobLink, setJobLink] = useState("");
   const [data, setData] = useState(null);
+  const [cvFile, setCvFile] = useState(null); // State to hold the uploaded CV file
 
   useEffect(() => {
     // Fetch data from the backend when the component mounts
@@ -19,14 +20,47 @@ const CVAnalyser = () => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!prompt.trim() && !jobLink.trim()) return; // Don't submit if both are empty
-    alert(`Job Link: ${jobLink}\nMessage: ${prompt}`);
-    setPrompt(""); // Clear the input after sending
+
+
+  //Making a new button for uploading CV PDF
+  const handleFileChange = (e) => { // Handle file input change
+    setCvFile(e.target.files[0]);// Store the selected file in state
   };
+  // File input element will be rendered in the JSX below
 
+  // Use the existing handleSubmit function for form submission and link it to CV upload and Job link 
+  // Use form data to send the CV file and job link to the backend
+  // Make the POST request to the backend with the CV file and job link
+  const handleSubmit = async (e) => { 
+    e.preventDefault(); // Prevent the default form submission behavior which refreshes the page 
+    if (!jobLink.trim() || !cvFile) {// Don't submit if all are empty
+    alert("Please provide a CV and No file uploaded");
+    return;
+  }
+    // Use form data to send the CV file and job link to the backend
+    const formData = new FormData(); // Create a new FormData object
+    formData.append('jobLink', jobLink); // Append the job link
+    formData.append('cvFile', cvFile);   // Append the CV file
+    formData.append('message', prompt); // Append the message if needed
 
+    try {
+
+      const response = await fetch('http://127.0.0.1:8000/analyse', { // Replace with your backend endpoint
+        method: 'POST', // Use POST method
+        body: formData, // Set the form data as the request body
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result = await response.json(); // Parse the JSON response
+      print (result); 
+      console.log('Success:', result); // Handle the response data
+      setData(result); // Update state with the response data
+    } catch (error) {
+      console.error('Error:', error); // Handle any errors
+    }
+  }; // <-- Close handleSubmit function here
 
   return (
     <div className="app-container">
@@ -45,10 +79,16 @@ const CVAnalyser = () => {
         <form className="chat-input-form" onSubmit={handleSubmit}>
           {/* The "Add" and "Tools" buttons are replaced with these: */}
           
-          {/* 1. New "Upload CV" button */}
-          <button type="button" className="action-button">
+          {/* 1. New "Upload CV" button and file input */}
+          <label className="action-button" style={{ cursor: "pointer" }}>
             Upload CV
-          </button>
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+          </label>
 
           {/* 2. New "Job Link" input box */}
           <input
