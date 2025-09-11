@@ -138,7 +138,7 @@ def get_ai_analysis(cv_text: str, job_description: str) -> AnalyseResponse:
     """
 
     # Step 5: Call the LLM API (e.g., Gemini or OpenAI GPT-4)
-    model = genai.GenerativeModel("gemini-2.5-pro")  # Initialize the Gemini model
+    model = genai.GenerativeModel("gemini-2.5-flash")  # Initialize the Gemini model
     response = model.generate_content(prompt)  # Generate text based on the constructed prompt
 
     import json

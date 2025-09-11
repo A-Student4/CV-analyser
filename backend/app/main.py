@@ -1,9 +1,21 @@
 from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from app import analyserservice
 from .models import AnalyseResponse, ImprovementSuggestion
 
 app = FastAPI()
+
+# Addition OF middleware to handle CORS (Cross-Origin Resource Sharing) issues
+app.add_middleware(
+    CORSMiddleware, # tHIS line ADDS THE CORS MIDDLEWARE TO THE FASTAPI APPLICATION, which is necessary to allow requests from different origins (e.g., if your frontend is hosted on a different domain than your backend)
+    allow_origins=["*"],  # Allows all origins, which means any domain can make requests to this API
+    allow_credentials=True,  # Allows cookies and authentication headers to be included in requests
+    allow_methods=["*"],  # Allows all methods so that GET, POST, PUT, DELETE, etc. requests are permitted
+    allow_headers=["*"],  # Allows all headers
+)
+
+
 
 @app.get("/") # this is the root endpoint and it will be called when we access the root URL which is http://localhost:8000/ this root URL is also called the home page and this is the first page that will be displayed when we access the URL
 def home():
@@ -17,7 +29,7 @@ def handle_analysis(
     initial_prompt: Optional[str] = Form(None, description="An optional initial prompt to guide the analysis.")
 ) -> AnalyseResponse:
     # For the MVP, we imagine that a CV and job link was provided in the request
-    # and we would process them to generate an analysis response.
+    # and we would process them to generate an analysis response.7
 
     # Step 1: Extract text from the uploaded CV file
     cv_text = analyserservice.extract_text_from_cv(cv_file)
