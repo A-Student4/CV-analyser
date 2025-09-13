@@ -33,16 +33,16 @@ async def handle_analysis(
         # and we would process them to generate an analysis response.7
 
         # Step 1: Extract text from the uploaded CV file
-        cv_text = await analyserservice.extract_text_from_cv(cv_file)
+        cv_text = analyserservice.extract_text_from_cv(cv_file)
 
         # Step 2: Scrape the job description from the provided job link
         job_description = analyserservice.scrape_job_description(job_link)
 
         # Step 3: Perform the AI analysis using the extracted CV text and job description
-        analysis_response = await analyserservice.get_ai_analysis(
+        analysis_response = analyserservice.get_ai_analysis(
             cv_text,
             job_description,
-            #initial_prompt
+            initial_prompt
         )
 
         return analysis_response    # Return the analysis response which will be automatically converted to JSON by FastAPI

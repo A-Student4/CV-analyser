@@ -23,7 +23,7 @@ const CVAnalyser = () => {
 
 
   //Making a new button for uploading CV PDF
-  const handleFileChange = (e) => { // Handle file input change
+  const handleFileChange = async (e) => { // Handle file input change
     setCvFile(e.target.files[0]);// Store the selected file in state
   };
   // File input element will be rendered in the JSX below
@@ -32,17 +32,24 @@ const CVAnalyser = () => {
   // Use form data to send the CV file and job link to the backend
   // Make the POST request to the backend with the CV file and job link
   const handleSubmit = async (e) => { 
-    e.preventDefault(); // Prevent the default form submission behavior which refreshes the page 
+    e.preventDefault(); // Prevent the default form submission behavior which refreshes the page
+
     if (!jobLink.trim() || !cvFile) {// Don't submit if all are empty
-    alert("Please provide a CV and No file uploaded");
-    return;
-  }
+      alert("Please provide a CV and No file uploaded");
+      return;
+    }
     // Use form data to send the CV file and job link to the backend
     const formData = new FormData(); // Create a new FormData object
-    formData.append('jobLink', jobLink); // Append the job link
-    formData.append('cvFile', cvFile);   // Append the CV file
-    formData.append('message', prompt); // Append the message if needed
+    formData.append('job_link', jobLink); // Append the job link
+    formData.append('cv_file', cvFile);   // Append the CV file
+    formData.append('initial_prompt', prompt);
 
+     console.log("--- Checking FormData Contents ---");
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+    }
+    console.log("---------------------------------");
+    
     try {
 
       const response = await fetch('http://127.0.0.1:8000/analyse', { // Replace with your backend endpoint
@@ -51,15 +58,21 @@ const CVAnalyser = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData.detail, null, 2));
       }
       const result = await response.json(); // Parse the JSON response
-      print (result); 
       console.log('Success:', result); // Handle the response data
       setData(result); // Update state with the response data
-    } catch (error) {
-      console.error('Error:', error); // Handle any errors
-    }
+      
+      } catch (error) {
+        console.error('Error submitting form:', error);
+
+        // Convert the complex error message to a readable string for the alert
+        const errorMessage = error.message ? JSON.stringify(error.message, null, 2) : "An unknown error occurred.";
+
+        alert('Failed to analyze CV: \n' + errorMessage);
+      }
   }; // <-- Close handleSubmit function here
 
   return (
@@ -80,7 +93,7 @@ const CVAnalyser = () => {
           {/* The "Add" and "Tools" buttons are replaced with these: */}
           
           {/* 1. New "Upload CV" button and file input */}
-          <label className="action-button" style={{ cursor: "pointer" }}>
+          <label className="action-button" style={{ cursor: "pointer" }}> 
             Upload CV
             <input
               type="file"

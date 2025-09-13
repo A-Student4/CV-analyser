@@ -55,7 +55,7 @@ def extract_text_from_cv(cv_file: UploadFile) -> str:
     except Exception as e:
         return f"An error occurred while extracting text from the CV: {e}"
     
-def get_ai_analysis(cv_text: str, job_description: str) -> AnalyseResponse:
+def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> AnalyseResponse:
     """
     Performs the Core RAG analysis using the CV text and job description.
     Returns a Structured AnalyseResponse object.
