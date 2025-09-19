@@ -1,10 +1,10 @@
-import CVAnalyser from "./code";
+import ChatPage from "./ChatPage";
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <CVAnalyser />
+      <ChatPage />
     </div>
   );
 }

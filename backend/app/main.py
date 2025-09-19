@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from app import analyserservice
 from .models import AnalyseResponse, ImprovementSuggestion
+from .models import ChatRequest
+
 
 app = FastAPI()
 
@@ -23,11 +25,7 @@ def home():
 
 @app.post("/analyse", response_model=AnalyseResponse)
 
-async def handle_analysis(
-    cv_file: UploadFile = File(...),
-    job_link: str = Form(...),
-    initial_prompt: Optional[str] = Form(None)
-) -> AnalyseResponse:
+async def handle_analysis(cv_file: UploadFile = File(...), job_link: str = Form(...), initial_prompt: Optional[str] = Form(None)) -> AnalyseResponse:
     try:
         # For the MVP, we imagine that a CV and job link was provided in the request
         # and we would process them to generate an analysis response.7
@@ -49,3 +47,16 @@ async def handle_analysis(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+# In app/main.py
+# Make sure to import ChatRequest from your models
+
+@app.post("/chat")
+async def handle_chat(request: ChatRequest):
+    # For now, we just confirm we received the message.
+    # The real AI logic will go here in the next step.
+    print("Received chat history:", request.history) # For debugging in your terminal
+    try:
+        ai_message_text = analyserservice.get_chat_response(message=request.message, history=request.history)
+        return {"ai_response": ai_message_text}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

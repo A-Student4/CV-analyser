@@ -12,15 +12,31 @@ body {
   color: #e3e3e3; /* Light text color */
 }
 
-.app-container {
+.chat-page-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between; /* Pushes input to the bottom */
   align-items: center;
   height: 100vh;
   padding: 20px;
   box-sizing: border-box;
 }
+
+/* NEW STYLES FOR THE MAIN CONTENT AREA */
+.main-content {
+  flex-grow: 1; /* This makes the main content take up all available space */
+  display: flex;
+  flex-direction: column; /* This stacks the header, chat, and footer vertically */
+  align-items: center;
+  height: 100vh;
+}
+
+.chat-interface {
+  flex-grow: 1; /* This makes the chat area fill the space between header and footer */
+  overflow-y: auto; /* Adds a scrollbar if content gets long */
+  padding: 20px;
+}
+
 
 .chat-header h1 {
   font-size: 2.5rem;
@@ -153,6 +169,44 @@ body {
   overflow: hidden; /* Keeps the child elements inside the rounded corners */
 }
 
+.chat-window {
+  flex-grow: 1; /* Makes the chat window fill the available vertical space */
+  overflow-y: auto; /* Adds a scrollbar if the conversation is long */
+  padding: 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* Space between messages */
+}
+
+.message-container.user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse; /* Flips the order for user messages */
+}
+.loading-text {
+  margin: auto;
+  font-style: italic;
+  color: #8e98a3;
+} 
+
+/* Align AI messages to the left */
+.message-container.ai-message {
+  align-self: flex-start;
+}
+
+.icon-container {
+  font-size: 28px;
+  padding-top: 5px;
+  color: #8e98a3;
+}
+
+.text-container {
+  background-color: #1e1f20;
+  padding: 12px 18px;
+  border-radius: 18px;
+  text-align: left;
+  line-height: 1.6;
+}
+
 
 
 .chat-header .dots {
@@ -195,4 +249,78 @@ body {
 
 .chat-input-area button:hover {
   background-color: #0056b3; /* A darker blue on hover */
+}
+
+/* === SIDEBAR STYLES === */
+
+.sidebar {
+  width: 260px; /* A fixed width for the sidebar */
+  background-color: #1e1f20; /* Slightly lighter than the main background */
+  border-right: 1px solid #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.sidebar-header {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.new-chat-button {
+  background-color: transparent;
+  border: 1px solid #555;
+  color: #e3e3e3;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.2s; /* Smooth hover effect */
+}
+
+.new-chat-button:hover {
+  background-color: #333435;
+}
+
+.chat-history {
+  flex-grow: 1; /* Makes this section fill the remaining space */
+  overflow-y: auto; /* Adds a scrollbar if the history gets long */
+}
+
+.chat-history h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #8e98a3;
+  padding: 0 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.history-placeholder {
+  color: #8e98a3;
+  font-size: 14px;
+  padding: 0 10px;
+  font-style: italic;
+}
+.error-message {
+  background-color: #442a2a;
+  border: 1px solid #ff5555;
+  color: #FF0000;
+  padding: 10px 20px;
+  margin: 0 40px 20px 40px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.error-message pre {
+  white-space: pre-wrap; /* Allows the formatted JSON error to wrap */
+  word-break: break-all;
 }

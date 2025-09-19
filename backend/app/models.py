@@ -13,8 +13,13 @@ class ImprovementSuggestion(BaseModel):
     improvement_reason: str
 
 class AnalyseResponse(BaseModel):
-    match_score: float
+    match_score: int
     analysis_summary: str 
     suggested_improvements: List[ImprovementSuggestion]
     closing_remarks: str
+    
+class ChatRequest(BaseModel):
+    message: str
+    history: List[dict] # We'll send the conversation history for context
+
     

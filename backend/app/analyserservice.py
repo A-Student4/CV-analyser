@@ -30,7 +30,7 @@ def scrape_job_description(url: str) -> str:
         soup = BeautifulSoup(response.content, 'html.parser') 
         
         # This is a simplified example; actual implementation may vary based on the webpage structure
-        job_description = soup.find('div', 'job__description body')  # Assuming the job description is within a div with class 'job-description'
+        job_description = soup.find('div', 'job__description body') # Assuming the job description is within a div with class 'job-description'
         if job_description:
             return job_description.get_text(strip=True) # Extract and return the text content, stripping any extra whitespace
         else:
@@ -83,7 +83,7 @@ def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> 
     
     # We will split the CV text into smaller chunks for better embedding performance and retrieval later on.
     cv_chunks = []
-    for value in cv_text.split("\n"):
+    for value in cv_text.split("•"):
         if value.strip():
             cv_chunks.append(value.strip())
     
@@ -162,8 +162,22 @@ def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> 
             suggested_improvements=[],
             closing_remarks="If the issue persists, please contact support."
         )
+def get_chat_response(message: str, history: list[dict]) -> str:
+    prompt = f"""You are a expert career coach, that understands the struggles of a University Tech student.
+    You will give a response to the message: 
+    
+    {message} 
 
+    Considering the current chat history:
 
+    {history}
+
+    provide a response to the user. 
+
+"""
+    model = genai.GenerativeModel("gemini-2.5-flash")  # Initialize the Gemini model
+    response = model.generate_content(prompt)  # Generate text based on the constructed prompt
+    return response.text
 
 if __name__ == "__main__":
     """
