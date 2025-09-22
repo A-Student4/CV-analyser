@@ -8,6 +8,7 @@ import pdfplumber
 from fastapi import UploadFile
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+import trafilatura
 
 
 """
@@ -18,26 +19,33 @@ from dotenv import load_dotenv
 """
 
 # Now, we will create a function that takes a URL and returns the job description text
+
+
+def _scrape_generic(url: str) -> str:
+    """A generic scraper using trafilatura."""
+    try:
+        downloaded = trafilatura.fetch_url(url)
+        # Extract main content, ignoring comments and tables
+        main_text = trafilatura.extract(downloaded, include_comments=False, include_tables=False)
+        if main_text:
+            print(main_text)
+            return main_text
+        return "Could not automatically extract a job description from this page."
+    except Exception:
+        return "An error occurred while trying to fetch the URL."
+    
 def scrape_job_description(url: str) -> str:
     """
-    Takes a URL, scrapes the webpage, and extracts the job description text.
-    Returns the clean text as a string.
+    For the MVP, we will start with a generic-only approach.
+    The structure is here to easily add site-specific scrapers later.
     """
-
-    try:
-        response = requests.get(url) # Send a GET request to the URL, which returns a Response object representing the HTML content of the job posting page
-        response.raise_for_status()  # Raise an error for bad responses
-        soup = BeautifulSoup(response.content, 'html.parser') 
-        
-        # This is a simplified example; actual implementation may vary based on the webpage structure
-        job_description = soup.find('div', 'job__description body') # Assuming the job description is within a div with class 'job-description'
-        if job_description:
-            return job_description.get_text(strip=True) # Extract and return the text content, stripping any extra whitespace
-        else:
-            return "Job description not found."
-    except requests.RequestException as e:
-        return f"An error occurred while fetching the job description: {e}"
-
+    # In the future, we could add high-accuracy scrapers here:
+    # if "greenhouse.io" in url:
+    #     return _scrape_greenhouse(url)
+    
+    # For now, we always use the generic fallback.
+    return _scrape_generic(url)
+    
 def extract_text_from_cv(cv_file: UploadFile) -> str:
     """
     Takes a fastAPI UploadFile PDF file object and extracts text from it.
