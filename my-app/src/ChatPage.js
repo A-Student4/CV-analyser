@@ -10,28 +10,40 @@ import './App.css';
 // This helper function transforms the API response into chat messages
 function transformAnalysisToMessages(apiResponse) {
   const messages = [];
+
+
   messages.push({
     id: 'summary_intro',
     sender: 'ai',
     text: `Analysis complete! Your initial match score is ${apiResponse.match_score}%. Here's the overall summary:`
   });
+
+
   messages.push({
     id: 'summary_text',
     sender: 'ai',
     text: apiResponse.analysis_summary
   });
+
+
+
   if (apiResponse.suggested_improvements?.length > 0) {
-    messages.push({
-      id: 'improvements_intro',
-      sender: 'ai',
-      text: "Here are my specific suggestions to strengthen your CV:"
-    });
+
+    let suggestionText = "Here are my specific suggestions to strengthen your CV:\n"
+    
+
+
+
     apiResponse.suggested_improvements.forEach((suggestion, index) => {
-      const suggestionText = `**Original Text:** "${suggestion.original_text}"\n\n**Suggested Text:** "${suggestion.suggested_text}"\n\n**Reason:** ${suggestion.improvement_reason}`;
-      messages.push({ id: `suggestion_${index}`, sender: 'ai', text: suggestionText });
+      suggestionText += `**Suggestion ${index + 1}:**\n`; // Add a heading for each suggestion
+      suggestionText += `*Original Text:* "${suggestion.original_text}"\n`;
+      suggestionText += `*Suggested Text:* "${suggestion.suggested_text}"\n`;
+      suggestionText += `*Reason:* ${suggestion.improvement_reason}\n\n`; // Add extra newlines for spacing    });
     });
+    messages.push({ id: ``, sender: 'ai', text: suggestionText });
   }
-   messages.push({
+
+  messages.push({
     id: 'closing_remarks',
     sender: 'ai',
     text: apiResponse.closing_remarks

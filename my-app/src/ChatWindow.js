@@ -12,7 +12,7 @@ const ChatWindow = ({ messages }) => {
       {messages.map((msg) => (
         <Message key={msg.id} message={msg} />
       ))}
-      {/* We can add a loading indicator here later */}
+      <p> Loading...</p> {/* We can format the loading indicator here later */}
     </main>
   );
 };
