@@ -1,6 +1,7 @@
 from .models import AnalyseResponse, ImprovementSuggestion
 from chromadb.utils import embedding_functions
 import google.generativeai as genai
+from dotenv import load_dotenv
 import os
 import chromadb
 import requests
@@ -13,6 +14,12 @@ import spacy
 
 # Load the English language model
 nlp = spacy.load("en_core_web_sm")
+
+# Load environment variables from a .env file if present
+load_dotenv()
+# Now we can access environment variables like GEMINI_API_KEY using os.getenv
+# For example:
+gemini_api_key = os.getenv("GEMINI_API_KEY")
 
 """
     Here, we would implement the actual logic to:
@@ -80,7 +87,7 @@ def chunk_text_by_sentence(text: str) -> list[str]:
     for sent in doc.sents:
         clean_text = sent.text.strip()  # Get the text and clean it
         sentences.append(clean_text)    # Add it to the list
-        
+
     return sentences
 
 def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> AnalyseResponse:
@@ -96,8 +103,6 @@ def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> 
     #6. Parse the LLM response and format it into the AnalyseResponse structure.
 
     # Load the Gemini API key from environment variables
-    load_dotenv()  # Load environment variables from a .env file if one is present anywhere in the project directory
-    gemini_api_key = os.getenv("GEMINI_API_KEY")
     if not gemini_api_key:
         raise ValueError("GEMINI_API_KEY not found in environment variables.")
     genai.configure(api_key=gemini_api_key)
@@ -186,7 +191,7 @@ def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> 
     """
 
     # Step 5: Call the LLM API (e.g., Gemini or OpenAI GPT-4)
-    model = genai.GenerativeModel("gemini-2.5-flash")  # Initialize the Gemini model
+    model = genai.GenerativeModel("gemini-2.5-pro")  # Initialize the Gemini model
     response = model.generate_content(prompt)  # Generate text based on the constructed prompt
 
     import json
@@ -223,7 +228,11 @@ def get_chat_response(message: str, history: list[dict]) -> str:
     provide a response to the user. 
 
 """
-    model = genai.GenerativeModel("gemini-2.5-flash")  # Initialize the Gemini model
+    if not gemini_api_key:
+        raise ValueError("GEMINI_API_KEY not found in environment variables.")
+    genai.configure(api_key=gemini_api_key)
+    
+    model = genai.GenerativeModel("gemini-2.5-pro")  # Initialize the Gemini model
     response = model.generate_content(prompt)  # Generate text based on the constructed prompt
     return response.text
 

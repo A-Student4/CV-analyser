@@ -31,9 +31,6 @@ function transformAnalysisToMessages(apiResponse) {
 
     let suggestionText = "Here are my specific suggestions to strengthen your CV:\n"
     
-
-
-
     apiResponse.suggested_improvements.forEach((suggestion, index) => {
       suggestionText += `**Suggestion ${index + 1}:**\n`; // Add a heading for each suggestion
       suggestionText += `*Original Text:* "${suggestion.original_text}"\n`;
