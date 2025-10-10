@@ -70,6 +70,12 @@ const ChatPage = () => {
     formData.append('job_link', jobLink);
     formData.append('initial_prompt', prompt);
 
+    console.log("Submitting form data:", {
+      cvFile,
+      jobLink,
+      prompt
+    });
+
     try {
       const response = await fetch("http://127.0.0.1:8000/analyse", {
         method: "POST",

@@ -9,7 +9,10 @@ from fastapi import UploadFile
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import trafilatura
+import spacy
 
+# Load the English language model
+nlp = spacy.load("en_core_web_sm")
 
 """
     Here, we would implement the actual logic to:
@@ -59,10 +62,27 @@ def extract_text_from_cv(cv_file: UploadFile) -> str:
             full_text = cv_file.filename + "\n\n"  # Start with the filename for context
             for page in pdf.pages:
                 full_text += page.extract_text() + "\n"  # Extract text from each page and add a newline for separation
+        print(f"--- DEBUG: Extracted text from CV ---\n{full_text}\n--- End of extracted text ---")
         return full_text.strip()  # Return the full text, stripping any extra whitespace
     except Exception as e:
         return f"An error occurred while extracting text from the CV: {e}"
-    
+
+def chunk_text_by_sentence(text: str) -> list[str]:
+    """
+    Takes a block of text and splits it into a list of sentences using spaCy.
+    This provides semantically meaningful chunks for embedding.
+    """
+    if not text:
+        return []
+
+    doc = nlp(text)  # Process CV text with spaCy NLP model
+    sentences = []  # Create an empty list
+    for sent in doc.sents:
+        clean_text = sent.text.strip()  # Get the text and clean it
+        sentences.append(clean_text)    # Add it to the list
+        
+    return sentences
+
 def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> AnalyseResponse:
     """
     Performs the Core RAG analysis using the CV text and job description.
@@ -86,25 +106,44 @@ def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> 
 
     # Now steps 1 and 2: Create embeddings and store in a vector database: ChromaDB
     client = chromadb.Client()  # Initialize ChromaDB client
+
+    try:
+        client.delete_collection("cv_collection")
+        print("--- DEBUG: Deleted existing collection ---")
+    except Exception as e:
+        print(f"There was nothing to reset in ChromaDB: {e}")
+
     collection = client.get_or_create_collection(name="cv_collection",
                                                  embedding_function=gemini_ef,) # Use the Gemini embedding function for creating embeddings
-    
+    """
     # We will split the CV text into smaller chunks for better embedding performance and retrieval later on.
     cv_chunks = []
     for value in cv_text.split("•"):
         if value.strip():
             cv_chunks.append(value.strip())
-    
+    """
+
+    # We will split the CV text into semantically meaningful sentences.
+    cv_chunks = chunk_text_by_sentence(cv_text)
+    print(f"--- DEBUG: CV split into {len(cv_chunks)} chunks ---")
+    print(cv_chunks)
+
+    if not cv_chunks:
+        raise ValueError("No text chunks extracted from CV — check PDF extraction and chunking logic.")
+
     # Create embeddings for each chunk of CV text, these embeddings will be used for similarity search later on, 
     # the purpose of the embeddings is to convert the text into a numerical format that captures its semantic meaning, allowing us to perform efficient similarity searches.
     #  Similarity searches are necessary to find the most relevant sections of the CV that match the job description.
 
     
     # Store the embeddings in the ChromaDB collection with unique IDs for each chunk for future retrieval  
-    collection.add(
-        documents=cv_chunks,
-        ids=[f"cv_chunk_{i}" for i in range(len(cv_chunks))]  # Unique IDs for each chunk
-    )
+    try:
+        collection.add(
+            documents=cv_chunks,
+            ids=[f"cv_chunk_{i}" for i in range(len(cv_chunks))]  # Unique IDs for each chunk
+        )
+    except Exception as e:
+        raise RuntimeError(f"Failed to add embeddings to ChromaDB collection: {e}")
 
     # Step 3: Use the job description to query the vector database and retrieve relevant CV sections.
     results = collection.query(
@@ -113,7 +152,8 @@ def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> 
     )
 
     retrieved_cv_sections = "\n---\n".join(results['documents'][0])  # Combine the retrieved CV sections into a single string, separating each section with "---" 
-   
+    print(job_description)
+
     # Step 4: Construct a detailed prompt for the LLM, including the job description and retrieved CV sections.
     prompt = f"""
     You are an expert career coach for UK university tech students. Your task is to analyze a CV against a job description and provide a match score, a summary of the analysis, and specific improvement suggestions for the CV. 
