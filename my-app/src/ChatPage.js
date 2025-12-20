@@ -6,6 +6,7 @@ import ChatWindow from './ChatWindow';
 import ChatInput from './ChatInput';
 import AnalysisForm from './AnalysisForm';
 import './App.css';
+import { CircleLoader } from 'react-spinners';
 
 // This helper function transforms the API response into chat messages
 function transformAnalysisToMessages(apiResponse) {
@@ -32,10 +33,10 @@ function transformAnalysisToMessages(apiResponse) {
     let suggestionText = "Here are my specific suggestions to strengthen your CV:\n"
     
     apiResponse.suggested_improvements.forEach((suggestion, index) => {
-      suggestionText += `**Suggestion ${index + 1}:**\n`; // Add a heading for each suggestion
-      suggestionText += `*Original Text:* "${suggestion.original_text}"\n`;
-      suggestionText += `*Suggested Text:* "${suggestion.suggested_text}"\n`;
-      suggestionText += `*Reason:* ${suggestion.improvement_reason}\n\n`; // Add extra newlines for spacing    });
+      suggestionText += `Suggestion ${index + 1}:\n`; // Add a heading for each suggestion
+      suggestionText += `Original Text: "${suggestion.original_text}"\n`;
+      suggestionText += `Suggested Text: "${suggestion.suggested_text}"\n`;
+      suggestionText += `Reason: ${suggestion.improvement_reason}\n\n`; // Add extra newlines for spacing    });
     });
     messages.push({ id: ``, sender: 'ai', text: suggestionText });
   }
@@ -155,6 +156,15 @@ const ChatPage = () => {
         {/* --- CONDITIONAL RENDERING --- */}
         {/* We use appState to decide which input component to show at the bottom */}
         {appState === 'initial' && <AnalysisForm onSubmit={handleAnalysisSubmit} isLoading={appState === 'loading'} />}
+        {/*Making a loading indicator (react spinner will be added now)*/}
+
+        {appState === 'loading' && (
+          <div className="loading-indicator">
+            <CircleLoader size ={50} color="#bac5c3ff" />
+          </div>        
+        )
+        }
+
         
         {appState === 'analysed' && <ChatInput onSendMessage={handleSendMessage} disabled={appState === 'loading'} />}
       </div>

@@ -1,6 +1,6 @@
 from .models import AnalyseResponse, ImprovementSuggestion
 from chromadb.utils import embedding_functions
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 import os
 import chromadb
@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import trafilatura
 import spacy
+
+
 
 # Load the English language model
 nlp = spacy.load("en_core_web_sm")
@@ -105,7 +107,7 @@ def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> 
     # Load the Gemini API key from environment variables
     if not gemini_api_key:
         raise ValueError("GEMINI_API_KEY not found in environment variables.")
-    genai.configure(api_key=gemini_api_key)
+    
 
     gemini_ef = embedding_functions.GoogleGenerativeAiEmbeddingFunction(api_key=gemini_api_key, model_name="models/text-embedding-004") # Initialize the embedding function with the Gemini API key and specified model
 
@@ -191,8 +193,12 @@ def get_ai_analysis(cv_text: str, job_description: str, initial_prompt: str) -> 
     """
 
     # Step 5: Call the LLM API (e.g., Gemini or OpenAI GPT-4)
-    model = genai.GenerativeModel("gemini-2.5-pro")  # Initialize the Gemini model
-    response = model.generate_content(prompt)  # Generate text based on the constructed prompt
+
+    client = genai.Client(api_key=gemini_api_key)
+    response = client.models.generate_content(
+        model = 'gemini-3-flash-preview',
+        contents = (prompt)  # Generate text based on the constructed prompt
+    )
 
     import json
     raw_response_text = response.text
@@ -230,10 +236,13 @@ def get_chat_response(message: str, history: list[dict]) -> str:
 """
     if not gemini_api_key:
         raise ValueError("GEMINI_API_KEY not found in environment variables.")
-    genai.configure(api_key=gemini_api_key)
+    client = genai.Client(api_key=gemini_api_key)
     
-    model = genai.GenerativeModel("gemini-2.5-pro")  # Initialize the Gemini model
-    response = model.generate_content(prompt)  # Generate text based on the constructed prompt
+    client = genai.Client()
+    response = client.models.generate_content(
+        model = 'gemini-3-flash-preview',
+        contents = (prompt)  # Generate text based on the constructed prompt
+    )
     return response.text
 
 if __name__ == "__main__":

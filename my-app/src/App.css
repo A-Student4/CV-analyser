@@ -31,11 +31,6 @@ body {
   height: 100vh;
 }
 
-.chat-interface {
-  flex-grow: 1; /* This makes the chat area fill the space between header and footer */
-  overflow-y: auto; /* Adds a scrollbar if content gets long */
-  padding: 20px;
-}
 
 
 .chat-header h1 {
@@ -122,52 +117,8 @@ body {
 .send-button:hover {
   background-color: #333435;
 }
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: rgb(49, 48, 47);
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-/* Main container for the whole widget */
-
-.chat-widget {
-  border: 5px solid #ddd; /* A light grey border like the image */
-  border-radius: 8px; /* Rounded corners for the container */
-  font-family: sans-serif;
-  width: 60%; /* Make it take up the full width of its parent */
-  max-width: 700px; /* Optional: prevent it from being too wide */
-  margin: 50px auto; /* "auto" on the left and right will center it */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* A soft shadow */
-  overflow: hidden; /* Keeps the child elements inside the rounded corners */
-}
 
 .chat-window {
   flex-grow: 1; /* Makes the chat window fill the available vertical space */
@@ -182,11 +133,7 @@ body {
   align-self: flex-end;
   flex-direction: row-reverse; /* Flips the order for user messages */
 }
-.loading-text {
-  margin: auto;
-  font-style: italic;
-  color: #8e98a3;
-} 
+
 
 /* Align AI messages to the left */
 .message-container.ai-message {
@@ -211,40 +158,17 @@ body {
 
 
 
-.chat-header .dots {
-  color: #999;
+/*Loading indicator in the middle of the page*/
+.loading-indicator {
+  height: 150vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 
 
-/* The area at the bottom holding the input and button */
-.chat-input-area {
-  display: flex; /* Aligns the input field and button side-by-side */
-  border-top: 1px solid #ddd;
-}
-
-/* The text input field */
-.chat-input-area input {
-  flex-grow: 1; /* Makes the input field take up all available space */
-  border: none; /* Removes the default border */
-  padding: 16px;
-  font-size: 14px;
-}
-
-
-/* The "Send" button 
-.chat-input-area button {
-  background-color: #0707072c;
-  color: white;  White text 
-  border: none;
-  padding: 0 24px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;  Makes the mouse turn into a pointer on hover */
-
-.chat-input-area button:hover {
-  background-color: #0056b3; /* A darker blue on hover */
-}
 
 /* === SIDEBAR STYLES === */
 
