@@ -5,7 +5,7 @@ import Sidebar from './Sidebar';
 import ChatWindow from './ChatWindow';
 import ChatInput from './ChatInput';
 import AnalysisForm from './AnalysisForm';
-import './App.css';
+import '../styles/App.css'
 import { CircleLoader } from 'react-spinners';
 
 // This helper function transforms the API response into chat messages
